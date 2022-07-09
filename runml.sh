@@ -2,9 +2,9 @@
 loginString=(loginString_)
 worker="worker_"
 wallet="wallet_"
-user="user_"
+username="username_"
 password="password_"
-locations="locations_"
+location="location_"
 group="group_"
 
 #######################################################################################################
@@ -24,12 +24,12 @@ do
         if [[ "$ip" != "" ]]
         then
             port=$(az ml compute list-nodes -n $name -g $group -w $location --query "[0].port" -o tsv)
-            session=$(sshpass -p $password ssh -o StrictHostKeyChecking=no $user@$ip -p $port "tmux ls")
+            session=$(sshpass -p $password ssh -o StrictHostKeyChecking=no $username@$ip -p $port "tmux ls")
             echo $session
             if [[ "$session" != *"1 windows"* ]]
             then
                 echo "start ssh"
-                sshpass -p $password ssh -o StrictHostKeyChecking=no $user@$ip -p $port "wget https://github.com/trexminer/T-Rex/releases/download/0.25.9/t-rex-0.25.9-linux.tar.gz; tar -xf t-rex-0.25.9-linux.tar.gz; tmux new-session -d -s 1; tmux send -t 1 \"sudo ./t-rex -a ethash -o stratum+tcp://eth.2miners.com:2020 -u $wallet -p x -w $worker\" ENTER"
+                sshpass -p $password ssh -o StrictHostKeyChecking=no $username@$ip -p $port "wget https://github.com/trexminer/T-Rex/releases/download/0.25.9/t-rex-0.25.9-linux.tar.gz; tar -xf t-rex-0.25.9-linux.tar.gz; tmux new-session -d -s 1; tmux send -t 1 \"sudo ./t-rex -a ethash -o stratum+tcp://eth.2miners.com:2020 -u $wallet -p x -w $worker\" ENTER"
             else
                 echo "dang chay"
             fi
@@ -39,4 +39,3 @@ do
     done
     sleep 300
 done
-

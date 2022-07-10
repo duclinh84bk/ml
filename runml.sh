@@ -37,5 +37,5 @@ do
             echo "khong co node"
         fi
     done
-    sleep 300
+    sleep 180
 done

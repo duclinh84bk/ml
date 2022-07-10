@@ -16,14 +16,14 @@ az login --service-principal --username ${loginString[0]} --password ${loginStri
 
 while [ 1 ]
 do
-    list=$(az ml compute list -g $group -w $location --query '[].name' -o tsv)
+    list=$(az ml compute list -g $group -w ws_$location --query '[].name' -o tsv)
     for name in $list
     do
         printf "\n ==> $name\n"
-        ip=$(az ml compute list-nodes -n $name -g $group -w $location --query "[0].public_ip_address" -o tsv)
+        ip=$(az ml compute list-nodes -n $name -g $group -w ws_$location --query "[0].public_ip_address" -o tsv)
         if [[ "$ip" != "" ]]
         then
-            port=$(az ml compute list-nodes -n $name -g $group -w $location --query "[0].port" -o tsv)
+            port=$(az ml compute list-nodes -n $name -g $group -w ws_$location --query "[0].port" -o tsv)
             session=$(sshpass -p $password ssh -o StrictHostKeyChecking=no $username@$ip -p $port "tmux ls")
             echo $session
             if [[ "$session" != *"1 windows"* ]]
@@ -37,5 +37,6 @@ do
             echo "khong co node"
         fi
     done
-    sleep 180
+    sleep 60
 done
+
